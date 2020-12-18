@@ -32,4 +32,8 @@
         <name>packcrack</name>
         <user_friendly_name>Triple-chunk sand-based terrain filtering</user_friendly_name>
     </app>
+    <app>
+        <name>slimepack</name>
+        <user_friendly_name>Flood-fill slime chunk swarm exploration and density filtering</user_friendly_name>
+    </app>
 </boinc>
