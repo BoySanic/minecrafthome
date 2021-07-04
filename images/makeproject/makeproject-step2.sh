@@ -129,6 +129,6 @@ yes | bin/update_versions
 #    --priority 12000 \
 #    --min_quorum 2 \
 #    --wu_name "${wu_name}"
-# done <<< "$(cat ./onechunk_taskinfo.txt)"; done
+# done <<< "$(cat ./onechunk_taskinfo.txt)";
 
 touch $PROJECT_ROOT/.built_${PROJECT}
