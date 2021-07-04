@@ -32,4 +32,8 @@
         <name>packcrack</name>
         <user_friendly_name>Triple-chunk sand-based terrain filtering</user_friendly_name>
     </app>
+    <app>
+        <name>onechunk</name>
+        <user_friendly_name>OneChunk biome-based CPU stronghold filter</user_friendly_name>
+    </app>
 </boinc>

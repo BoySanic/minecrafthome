@@ -1,0 +1,24 @@
+<input_template>
+    <file_info>
+        [ <gzip/> ]
+        [ <gzipped_nbytes> N </gzipped_nbytes> ]
+        [ <sticky/> ]
+        [ <no_delete/> ]
+        [ <report_on_rpc/> ]
+        [ <physical_name>...</physical_name> ]
+        [ <url>...</url> ]
+        [ <url>...</url> ]
+        [ <md5_cksum>...</md5_cksum> ]
+        [ <nbytes>...</nbytes> ]
+    </file_info>
+    [ ... other files  ]
+    <workunit>
+        <file_ref>
+            <open_name>ocinput.txt</open_name>
+            <copy_file/>
+        </file_ref>
+        <rsc_fpops_est>3e16</rsc_fpops_est>
+        <rsc_fpops_bound>6e20</rsc_fpops_bound>
+        <delay_bound>604800</delay_bound>
+    </workunit>
+</input_template>

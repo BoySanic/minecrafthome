@@ -118,4 +118,17 @@ yes | bin/update_versions
 #    --wu_name "${wu_name}"
 # done <<< "$(cat ./kaktwoos_seeds/seeds_y64.txt)"; done
 
+# do while read line; do
+#  counter=counter+1
+#  wu_name="onechunk_$(counter)_$(counter+1)')"
+#  echo "create_work: ${wu_name}"
+#  bin/create_work --appname onechunk \
+#    --wu_template templates/onechunk_in \
+#    --result_template templates/onechunk_out \
+#    --remote_url "cdn.forgetyour.faith:42069/download?byterange=$(counter*2400)-$((counter+1)*2400) 2400 $(echo $line)"\
+#    --priority 12000 \
+#    --min_quorum 2 \
+#    --wu_name "${wu_name}"
+# done <<< "$(cat ./onechunk_taskinfo.txt)"; done
+
 touch $PROJECT_ROOT/.built_${PROJECT}
