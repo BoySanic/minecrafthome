@@ -118,8 +118,9 @@ yes | bin/update_versions
 #    --wu_name "${wu_name}"
 # done <<< "$(cat ./kaktwoos_seeds/seeds_y64.txt)"; done
 
-# do while read line; do
-#  counter=counter+1
+#  counter=0
+# while read line; do
+#  counter=$(counter)+1
 #  wu_name="onechunk_$(counter)_$(counter+1)')"
 #  echo "create_work: ${wu_name}"
 #  bin/create_work --appname onechunk \
