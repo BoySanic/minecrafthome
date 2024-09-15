@@ -143,7 +143,7 @@ Do not reply to this message.
 //////////////////// a user clicks the red "x" to report a post ///////////
 //
 function send_report_post_email($user, $forum, $thread,  $post, $message) {
-        global $master_url;
+	global $master_url;
 
     $body = "";
     $owner = BoincUser::lookup_id($post->user);
@@ -199,7 +199,7 @@ because your postings have not followed our guidelines.
 //////////////////// a banishment vote has been started  ///////////
 //
 function send_banish_vote_email($user, $duration, $reason, $end_time) {
-        global $master_url;
+	global $master_url;
     $now=time();
     $subject = PROJECT." banishment vote underway";
     $vote_url = $master_url."forum_banishment_vote.php";

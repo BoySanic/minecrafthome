@@ -1,7 +1,7 @@
 <?php
 // This file is part of BOINC.
 // http://boinc.berkeley.edu
-// Copyright (C) 2008 University of California
+// Copyright (C) 2021 University of California
 //
 // BOINC is free software; you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License
@@ -109,6 +109,13 @@ if (!defined('USER_HOME')) {
 if (!defined('POST_MAX_LINKS')) {
     define('POST_MAX_LINKS', 0);
 }
+if (!defined('DARK_MODE')) {
+    define('DARK_MODE', false);
+}
+// require validated email to post in forums, send PMs, or make a profile
+if (!defined('VALIDATE_EMAIL_TO_POST')) {
+    define('VALIDATE_EMAIL_TO_POST', false);
+}
 
 // sleep this long on any login failure
 // (slow the rate of hacker attacks)
@@ -122,6 +129,7 @@ $did_page_head = false;
 define('KILO', 1024);
 define('MEGA', 1024*KILO);
 define('GIGA', 1024*MEGA);
+define('TERA', 1024*GIGA);
 
 // return true if this page is HTTPS
 //
@@ -169,15 +177,22 @@ $got_logged_in_user = false;
 
 function get_logged_in_user($must_be_logged_in=true) {
     global $g_logged_in_user, $got_logged_in_user;
-    if ($got_logged_in_user) return $g_logged_in_user;
+    if ($got_logged_in_user) {
+        // this could have been called earlier with $must_be_logged_in false
+        if ($must_be_logged_in) {
+            if ($g_logged_in_user) return $g_logged_in_user;
+        } else {
+            return $g_logged_in_user;
+        }
+    }
 
     if (web_stopped()) return null;
 
     $authenticator = null;
     if (isset($_COOKIE['auth'])) $authenticator = $_COOKIE['auth'];
 
-    $authenticator = BoincDb::escape_string($authenticator);
     if ($authenticator) {
+        $authenticator = BoincDb::escape_string($authenticator);
         $g_logged_in_user = BoincUser::lookup("authenticator='$authenticator'");
     }
     if ($must_be_logged_in && !$g_logged_in_user) {
@@ -286,8 +301,29 @@ function page_head(
     echo "<title>$t</title>\n";
     echo '
         <meta charset="utf-8">
-        <link type="text/css" rel="stylesheet" href="'.secure_url_base().'/bootstrap.min.css" media="all">
     ';
+    if (DARK_MODE) {
+        echo <<<EOT
+<script>
+  if (window.matchMedia('(prefers-color-scheme: dark)').media === 'not all') {
+      console.log("foobar");
+    document.documentElement.style.display = 'none';
+    document.head.insertAdjacentHTML(
+        'beforeend',
+        '<link rel="stylesheet" href="sample_bootstrap.min.css" onload="document.documentElement.style.display = \'\'"><link rel="stylesheet" href="custom.css">'
+    );
+  }
+</script>
+<link rel="stylesheet" href="bootstrap_darkly.min.css" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="custom_dark.css" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="sample_bootstrap.min.css" media="(prefers-color-scheme: no-preference), (prefers-color-scheme: light)">
+<link rel="stylesheet" href="custom.css" media="(prefers-color-scheme: no-preference), (prefers-color-scheme: light)">
+EOT;
+    } else {
+        echo '
+            <link type="text/css" rel="stylesheet" href="'.secure_url_base().'/bootstrap.min.css" media="all">
+        ';
+    }
     if (defined('STYLESHEET')) {
         $stylesheet = $url_base.STYLESHEET;
         echo "
@@ -660,7 +696,7 @@ function bbcode_info() {
 
 // strip slashes if magic quotes in effect
 function undo_magic_quotes($x) {
-    if (get_magic_quotes_gpc()) {
+    if (version_compare(PHP_VERSION, '5.4.0') < 0 && get_magic_quotes_gpc()) {
         return stripslashes($x);
     }
     return $x;
@@ -877,7 +913,7 @@ function button_text($url, $text, $desc=null, $class="btn-success btn-sm") {
 }
 
 function show_button($url, $text, $desc=null, $class="btn-success btn-sm") {
-    echo button_text($url, $text, $desc=null, $class);
+    echo button_text($url, $text, $desc, $class);
 }
 
 // for places with a bunch of buttons, like forum posts
@@ -990,6 +1026,7 @@ function sanitize_local_url($x) {
 // strip HTML tags
 //
 function sanitize_tags($x) {
+    if (!$x) return $x;
     return strip_tags($x);
 }
 
@@ -1004,6 +1041,7 @@ function sanitize_numeric($x) {
 }
 
 function sanitize_email($x) {
+    if (!$x) return $x;
     if (function_exists('filter_var')) {
         return filter_var($x, FILTER_SANITIZE_EMAIL);
     } else {
@@ -1131,8 +1169,8 @@ function google_search_form($url) {
         <form method=get action=\"https://google.com/search\">
         <input type=hidden name=domains value=\"$url\">
         <input type=hidden name=sitesearch value=\"$url\">
-        <input class=small name=q size=20>
-        <input class=small type=submit value=".tra("Search").">
+        <input name=q size=20>
+        <input type=submit value=".tra("Search").">
         </form>
         </nobr>
     ";
@@ -1151,6 +1189,9 @@ function text_end() {
 // express a size in terms of GB or MB
 //
 function size_string($x) {
+    if ($x > TERA) {
+        return number_format($x/TERA, 2)." TB";
+    }
     if ($x > GIGA) {
         return number_format($x/GIGA, 2)." GB";
     }
@@ -1159,6 +1200,20 @@ function size_string($x) {
 
 function cert_filename() {
     return defined("CERT_FILENAME")?CERT_FILENAME:"cert1.php";
+}
+
+// if user hasn't validated their email addr, tell them to
+//
+function check_validated_email($user) {
+    if (!$user->email_validated) {
+        page_head("Please validate your email address");
+        echo "
+            To post here, please
+            <a href=validate_email_addr.php>validate your email address<a>.
+        ";
+        page_tail();
+        exit;
+    }
 }
 
 $cvs_version_tracker[]="\$Id$";  //Generated automatically - do not edit
