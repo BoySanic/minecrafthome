@@ -55,7 +55,6 @@ if mysql -u root -e "" &> /dev/null ; then
     #
     #String is split between lines, so this directive does not apply.
     #shellcheck disable=SC1078-SC1079
-    #shellcheck disable=SC
     PYTHONPATH=/usr/local/boinc/py python -c """if 1:
         from Boinc import database, configxml
         database.create_database(srcdir='/usr/local/boinc',
