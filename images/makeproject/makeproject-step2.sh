@@ -2,6 +2,9 @@
 
 set -e
 
+#This is within a container, so, of course you didn't find it?
+#Disable directive for not being useful for this statement.
+#shellcheck disable=SC1091
 source /run/secrets/secrets.env
 
 PROJECT_ROOT_DEST=$PROJECT_ROOT.dst
@@ -29,10 +32,10 @@ for file in \$\{project\}*; do
 done
 
 # copy files
-cp -rfT --preserve=mode,ownership $PROJECT_ROOT $PROJECT_ROOT_DEST
+cp -rfT --preserve=mode,ownership "$PROJECT_ROOT" "$PROJECT_ROOT_DEST"
 mv "$PROJECT_ROOT" "${PROJECT_ROOT}".orig
 ln -s "$PROJECT_ROOT_DEST" "$PROJECT_ROOT"
-cd $PROJECT_ROOT
+cd "$PROJECT_ROOT"
 
 
 # wait for MySQL server to start
@@ -49,10 +52,14 @@ fi
 if mysql -u root -e "" &> /dev/null ; then
     echo "Creating database..."
     mysqladmin -h mysql -u root password "$DB_PASSWD"
+    #
+    #String is split between lines, so this directive does not apply.
+    #shellcheck disable=SC1078-SC1079
+    #shellcheck disable=SC
     PYTHONPATH=/usr/local/boinc/py python -c """if 1:
         from Boinc import database, configxml
         database.create_database(srcdir='/usr/local/boinc',
-                                 config=configxml.ConfigFile(filename='"$PROJECT_ROOT"/config.xml').read().config,
+                                 config=configxml.ConfigFile(filename='\"$PROJECT_ROOT\""/config.xml').read().config,
                                  drop_first=False)"""
 
 fi
