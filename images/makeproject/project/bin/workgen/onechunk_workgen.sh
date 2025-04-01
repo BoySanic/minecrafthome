@@ -3,7 +3,7 @@ IFS=' '
 filename='onechunk_tasks.txt'
 
 while read line; do
-    read -a strarr <<< "$line"
+    read -r -a strarr <<< "$line"
     ./bin/create_work --appname onechunk \
         --result_template templates/onechunk_out \
         --remote_file "https://ssg.seedfinding.com/tasks/get?taskid=${strarr[0]}"\
