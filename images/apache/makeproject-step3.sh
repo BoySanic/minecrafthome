@@ -1,4 +1,6 @@
 #!/bin/bash
+#shellcheck disable=SC2140 
+#shellcheck disable=SC1078
 
 set -e
 
@@ -43,7 +45,7 @@ do
     # start daemons as $BOINC_USER
     su "$BOINC_USER" -c """
         bin/start
-        (echo "PATH=\"$PATH\""; echo "SHELL=/bin/bash"; cat *.cronjob) | crontab""" #shellcheck disable=SC2140 #shellcheck disable=SC1078
+        (echo "PATH=\"$PATH\""; echo "SHELL=/bin/bash"; cat *.cronjob) | crontab""" 
 
     echo "Project startup complete."
 

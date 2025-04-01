@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+#String is split between lines, so this directive does not apply.
+#shellcheck disable=SC1078-SC1079
 
 set -e
 
@@ -52,15 +55,12 @@ fi
 if mysql -u root -e "" &> /dev/null ; then
     echo "Creating database..."
     mysqladmin -h mysql -u root password "$DB_PASSWD"
-    #
-    #String is split between lines, so this directive does not apply.
-    #shellcheck disable=SC1078-SC1079
+
     PYTHONPATH=/usr/local/boinc/py python -c """if 1:
         from Boinc import database, configxml
         database.create_database(srcdir='/usr/local/boinc',
                                  config=configxml.ConfigFile(filename='\"$PROJECT_ROOT\"/config.xml').read().config,
-                                 drop_first=False)""" #shellcheck disable=SC1079 #Multi-line string, does not apply.
-
+                                 drop_first=False)""" 
 fi
 
 (cd html/ops && ./db_schemaversion.php > "${PROJECT_ROOT}"/db_revision)
