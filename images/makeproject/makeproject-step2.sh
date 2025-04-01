@@ -1,7 +1,8 @@
 #!/bin/bash
 #
 #String is split between lines, so this directive does not apply.
-#shellcheck disable=SC1078-SC1079
+#shellcheck disable=SC1078
+#shellcheck disable=SC1079
 
 set -e
 
