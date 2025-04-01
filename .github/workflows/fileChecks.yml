@@ -72,8 +72,10 @@ jobs:
       - name: Success (if no failed files)
         if: ${{ env.failed_xml == '0' }} 
         run: echo "All version.xml files look correct (or we did not find any)."
+
   lint:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
-    - uses: cclauss/Find-Python-syntax-errors-action@master
+    name: check_python_syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cclauss/Find-Python-syntax-errors-action@master
