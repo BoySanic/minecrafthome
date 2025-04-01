@@ -58,7 +58,7 @@ if mysql -u root -e "" &> /dev/null ; then
     PYTHONPATH=/usr/local/boinc/py python -c """if 1:
         from Boinc import database, configxml
         database.create_database(srcdir='/usr/local/boinc',
-                                 config=configxml.ConfigFile(filename='\"$PROJECT_ROOT\""/config.xml').read().config,
+                                 config=configxml.ConfigFile(filename='\"$PROJECT_ROOT\"/config.xml').read().config,
                                  drop_first=False)"""
 
 fi
