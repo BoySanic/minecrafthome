@@ -2,7 +2,7 @@
 
 set -e
 
-cd $PROJECT_ROOT
+cd "$PROJECT_ROOT"
 
 # gives $BOINC_USER permission to run Docker commands
 #DOCKER_GID=$(stat -c '%g' /var/run/docker.sock)
@@ -43,8 +43,7 @@ do
     # start daemons as $BOINC_USER
     su "$BOINC_USER" -c """
         bin/start
-        (echo "PATH=$PATH"; echo "SHELL=/bin/bash"; cat *.cronjob) | crontab
-    """
+        (echo "PATH=\"$PATH\""; echo "SHELL=/bin/bash"; cat *.cronjob) | crontab""" #shellcheck disable=SC2140 #shellcheck disable=SC1078
 
     echo "Project startup complete."
 

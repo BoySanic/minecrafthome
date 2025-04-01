@@ -59,7 +59,7 @@ if mysql -u root -e "" &> /dev/null ; then
         from Boinc import database, configxml
         database.create_database(srcdir='/usr/local/boinc',
                                  config=configxml.ConfigFile(filename='\"$PROJECT_ROOT\"/config.xml').read().config,
-                                 drop_first=False)"""
+                                 drop_first=False)""" #shellcheck disable=SC1079 #Multi-line string, does not apply.
 
 fi
 
