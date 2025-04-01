@@ -2,7 +2,7 @@
 IFS=' '
 filename='onechunk_tasks.txt'
 
-while read line; do
+while read -r line; do
     read -r -a strarr <<< "$line"
     ./bin/create_work --appname onechunk \
         --result_template templates/onechunk_out \

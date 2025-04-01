@@ -51,6 +51,6 @@ do
     # subsequent times we build a project (such as after a PROJECT change), we
     # go through once then possibly go through again to avoid a race condition
     # with makeproject-step2.sh
-    inotifywait -e attrib .built_${PROJECT}
+    inotifywait -e attrib ".built_${PROJECT}"
 done
 

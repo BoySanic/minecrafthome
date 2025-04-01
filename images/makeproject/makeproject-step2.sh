@@ -130,4 +130,4 @@ yes | bin/update_versions
 #    --min_quorum 2
 # done
 
-touch $PROJECT_ROOT/.built_${PROJECT}
+touch "$PROJECT_ROOT/.built_${PROJECT}"
