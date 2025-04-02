@@ -143,9 +143,14 @@ jobs:
     name: Check binary architectures
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout github repo
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: Checkout LFS objects
+        run: git lfs checkout
 
+      - uses: actions/setup-python@v5
       - name: Install dependencies (if any)
         run: |
           python3 -m pip install --upgrade pip
