@@ -32,7 +32,7 @@ jobs:
       if: ${{ env.failed_apps != '0' }} 
       run: |
         echo "::error title=Missing executable permissions::Found .bin files without executable permissions.  See output for details."
-        cat output.txt
+        cat output_apps.txt
         exit 1
  
 
@@ -53,24 +53,24 @@ jobs:
  
 
       - name: Check apps
-        id: run_xml_check_script
+        id: run_bin_permissions
         run: |
-          python3 ci_tools/version-xml-check.py > output_xml.txt
-          echo "failed_xml=$(grep -c " - " output_xml.txt)" >> $GITHUB_ENV
+          python3 ci_tools/executable-check.py > output_bin.txt
+          echo "failed_bin=$(grep -c " - " output_bin.txt)" >> $GITHUB_ENV
         env:
           # Replace with the directory you want to check
-          DIRECTORY_TO_CHECK: images/makeproject/project/apps
+          DIRECTORY_TO_CHECK: images/makeproject/project/bin
 
       - name: Check for failed files
-        if: ${{ env.failed_xml != '0' }} 
+        if: ${{ env.failed_bin != '0' }} 
         run: |
           echo "::error title=Version mismatch::Found xml files with mismatched version number from parent directory.  See output for details."
-          cat output.txt
+          cat output_bin.txt
           exit 1
  
 
       - name: Success (if no failed files)
-        if: ${{ env.failed_xml == '0' }} 
+        if: ${{ env.failed_bin == '0' }} 
         run: echo "All version.xml files look correct (or we did not find any)."
   
   check_versionxml:
@@ -98,7 +98,7 @@ jobs:
         if: ${{ env.failed_xml != '0' }} 
         run: |
           echo "::error title=Version mismatch::Found xml files with mismatched version number from parent directory.  See output for details."
-          cat output.txt
+          cat output_xml.txt
           exit 1
  
 
@@ -131,7 +131,7 @@ jobs:
         if: ${{ env.failed_xml_exist != '0' }} 
         run: |
           echo "::error title=Version mismatch::Found xml files with mismatched version number from parent directory.  See output for details."
-          cat output.txt
+          cat output_xml_exist.txt
           exit 1
  
 
@@ -164,7 +164,7 @@ jobs:
         if: ${{ env.failed_binary_arch != '0' }} 
         run: |
           echo "::error title=Architecture mismatch::Found binary files with mismatched Architecture from parent directory.  See output for details."
-          cat output.txt
+          cat output_binary_arch.txt
           exit 1
  
 
