@@ -194,7 +194,11 @@ jobs:
         uses: Azbagheri/shell-linter@latest
   xml_lint:
     name: check_xml_syntax
-    uses: action-pack/valid-xml@v1
-    with:
-      path: "images/makeproject/project"
-      file-endings: ".xml
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Check XML Syntax
+        uses: action-pack/valid-xml@v1
+        with:
+          path: "images/makeproject/project"
+          file-endings: ".xml
