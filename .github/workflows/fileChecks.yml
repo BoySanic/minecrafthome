@@ -177,30 +177,54 @@ jobs:
         if: ${{ env.failed_binary_arch == '0' }} 
         run: echo "All binary files look correct (or we did not find any)."
 
-  py_lint:
-    name: check_python_syntax
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: cclauss/Find-Python-syntax-errors-action@master
+  lint:
+      name: SuperLint
+      runs-on: ubuntu-latest
 
-  sh_lint:
-    name: check_shell_syntax
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Run ShellCheck
-        uses: Azbagheri/shell-linter@latest
+      permissions:
+        contents: read
+        packages: read
+        # To report GitHub Actions status checks
+        statuses: write
 
-  xml_lint:
-    name: check_xml_syntax
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Check XML Syntax
-        uses: action-pack/valid-xml@v1
-        with:
-          path: "images/makeproject/project"
-          file-endings: ".xml"
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+          with:
+            # super-linter needs the full git history to get the
+            # list of files that changed across commits
+            fetch-depth: 0
+
+        - name: Super-linter
+          uses: super-linter/super-linter@v7.3.0 # x-release-please-version
+          env:
+            # To report GitHub Actions status checks
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#  py_lint:
+#    name: check_python_syntax
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: cclauss/Find-Python-syntax-errors-action@master
+
+#  sh_lint:
+#    name: check_shell_syntax
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#      - name: Run ShellCheck
+#        uses: Azbagheri/shell-linter@latest
+
+#  xml_lint:
+#    name: check_xml_syntax
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#      - name: Check XML Syntax
+#        uses: action-pack/valid-xml@v1
+#        with:
+#          path: "images/makeproject/project"
+#          file-endings: ".xml"
