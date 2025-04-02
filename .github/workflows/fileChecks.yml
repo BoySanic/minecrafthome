@@ -177,8 +177,6 @@ jobs:
         if: ${{ env.failed_binary_arch == '0' }} 
         run: echo "All binary files look correct (or we did not find any)."
 
-<<<<<<< Updated upstream
-=======
   check_binary_glibc:
     name: Check binary GLIBC dependency version
     runs-on: ubuntu-latest
@@ -219,18 +217,12 @@ jobs:
         run: echo "All binary files look correct (or we did not find any)."
 
 
->>>>>>> Stashed changes
   py_lint:
     name: check_python_syntax
     runs-on: ubuntu-latest
     steps:
-<<<<<<< Updated upstream
-      - uses: actions/checkout@v4
-      - uses: cclauss/Find-Python-syntax-errors-action@master
-=======
         - uses: actions/checkout@v4
         - uses: cclauss/Find-Python-syntax-errors-action@master
->>>>>>> Stashed changes
 
   sh_lint:
     name: check_shell_syntax
