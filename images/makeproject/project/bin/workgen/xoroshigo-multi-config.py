@@ -23,6 +23,9 @@ CONFIG_LO = int(CONFIG_RANGE.split("-")[0])
 CONFIG_HI = int(CONFIG_RANGE.split("-")[1])
 
 for filename in os.listdir(CONFIG_DIR):
+    file_path = os.path.join(CONFIG_DIR, filename)
+    FILENAME = file_path.split("/")[-1]
+
     print(f"Staging file {FILENAME}")
     result = subprocess.run(["bin/stage_file", "--verbose", "--copy", file_path])
 
@@ -31,12 +34,12 @@ for filename in os.listdir(CONFIG_DIR):
 
 for i in range(LOWER_BOUND, UPPER_BOUND):
     for filename in os.listdir(CONFIG_DIR):
+        FILENAME = file_path.split("/")[-1]
+        STRIPPED_FILENAME = FILENAME[0:len(FILENAME)-4]
         file_path = os.path.join(CONFIG_DIR, filename)
         if os.path.isfile(file_path):
             if int(FILENAME.split("-")[1]) in range(CONFIG_LO, CONFIG_HI+1):
                 print(f"Processing file: {filename}")
-                FILENAME = file_path.split("/")[-1]
-                STRIPPED_FILENAME = FILENAME[0:len(FILENAME)-4]
                 wu_name=f"xoroshigo_{WU_VERSION}_{STRIPPED_FILENAME}_{i}"
 
                 print(f"create_work: {wu_name}")
