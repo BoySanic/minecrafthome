@@ -36,18 +36,19 @@ for i in range(LOWER_BOUND, UPPER_BOUND):
                 if result.returncode != 0:
                     print("Staging file failed, proceeding anyway.")
                     wu_name=f"xoroshigo_{WU_VERSION}_{STRIPPED_FILENAME}_{i}"
-                    print(f"create_work: {wu_name}")
-                    cmd = [
-                        "bin/create_work",
-                        "--appname", "xoroshigo2",
-                        "--wu_template", f"templates/xoroshigo_in_{STRIPPED_FILENAME}",
-                        "--result_template", "templates/xoroshigo_out",
-                        "--command_line", f"--passthrough_child {FILENAME} 30000000 {i} input.npz",
-                        "--wu_name", wu_name,
-                        "--min_quorum", "2",
-                        "--credit", "5000"
-                    ]
-                    result = subprocess.run(cmd, text=True)
-                    if(result.returncode != 0):
-                        print(f"Create_work failed: {result}")
-                        exit(1)
+
+                print(f"create_work: {wu_name}")
+                cmd = [
+                    "bin/create_work",
+                    "--appname", "xoroshigo2",
+                    "--wu_template", f"templates/xoroshigo_in_{STRIPPED_FILENAME}",
+                    "--result_template", "templates/xoroshigo_out",
+                    "--command_line", f"--passthrough_child {FILENAME} 30000000 {i} input.npz",
+                    "--wu_name", wu_name,
+                    "--min_quorum", "2",
+                    "--credit", "5000"
+                ]
+                result = subprocess.run(cmd, text=True)
+                if(result.returncode != 0):
+                    print(f"Create_work failed: {result}")
+                    exit(1)
